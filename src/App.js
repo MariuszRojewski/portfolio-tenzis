@@ -4,6 +4,7 @@ import "./global.css";
 // Komponenty
 import Die from "./components/Die";
 import Confetti from "react-confetti";
+import SortDice from "./components/SortDice";
 
 function App() {
   const [dice, setDice] = React.useState(createDices());
@@ -104,14 +105,6 @@ function App() {
     );
   });
 
-  function compareNumbers(a, b) {
-    return a - b;
-  }
-  const sortBestScore = theBestScore.sort(compareNumbers);
-  const bestScore = sortBestScore.map((score, index) => {
-    return <li key={index}>{score} rolls</li>;
-  });
-
   return (
     <main>
       <h1 className="dice-header">Tenzis</h1>
@@ -127,7 +120,9 @@ function App() {
       </div>
       <div className="score">
         The best score:
-        <ul>{bestScore}</ul>
+        <ul>
+          <SortDice theBestScore={theBestScore} />
+        </ul>
       </div>
       <button className="dice-roll" onClick={rollDice}>
         {win ? "Start New Game" : "Roll Dice"}
