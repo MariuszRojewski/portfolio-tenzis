@@ -72,3 +72,7 @@ main {
     font-weight: 700;
     margin: 5px 0;
 }
+
+.score {
+    margin-top: 10px;
+}

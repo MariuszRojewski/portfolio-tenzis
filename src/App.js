@@ -11,11 +11,9 @@ function App() {
   const [rolls, setRolls] = React.useState(1);
   const [totalWins, setTotalWins] = React.useState(0);
 
-  // TRZEBA NAPISAĆ ZAPISYWANIE DANYCH W LOCAL STORAGE
-
-  // const [saveTotalWins, setSaveTotalWins] = React.useState(
-  //   JSON.parse(localStorage.getItem(win)) || 0
-  // );
+  const [theBestScore, setTheBestScore] = React.useState(
+    JSON.parse(localStorage.getItem("theBestScore")) || []
+  );
 
   React.useEffect(() => {
     const fistNumber = dice[0].value;
@@ -27,6 +25,10 @@ function App() {
       setTotalWins((oldTotalWins) => oldTotalWins + 1);
     }
   }, [dice]);
+
+  React.useEffect(() => {
+    localStorage.setItem("theBestScore", JSON.stringify(theBestScore));
+  }, [theBestScore]);
 
   function createDices() {
     const dice = [];
@@ -49,6 +51,7 @@ function App() {
       setDice(createDices());
       setRolls(0);
       setWin(false);
+      setTheBestScore((prevItems) => [...prevItems, rolls]);
     }
 
     setRolls((oldDiceNumber) => oldDiceNumber + 1);
@@ -101,6 +104,14 @@ function App() {
     );
   });
 
+  function compareNumbers(a, b) {
+    return a - b;
+  }
+  const sortBestScore = theBestScore.sort(compareNumbers);
+  const bestScore = sortBestScore.map((score, index) => {
+    return <li key={index}>{score} rolls</li>;
+  });
+
   return (
     <main>
       <h1 className="dice-header">Tenzis</h1>
@@ -113,6 +124,10 @@ function App() {
       <div className="dice-container">{diceElements}</div>
       <div>
         <span>ROLLS: {rolls}</span>/<span>TOTAL WINS: {totalWins}</span>
+      </div>
+      <div className="score">
+        The best score:
+        <ul>{bestScore}</ul>
       </div>
       <button className="dice-roll" onClick={rollDice}>
         {win ? "Start New Game" : "Roll Dice"}
