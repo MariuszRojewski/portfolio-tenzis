@@ -6,9 +6,9 @@ export default function SortDice({ theBestScore }) {
     return a - b;
   }
   const sortBestScore = theBestScore.sort(compareNumbers);
-  const bestScore = sortBestScore.map((score, index) => {
-    return <li key={index}>{score} rolls</li>;
-  });
+  const bestScore = sortBestScore.map((score, index) => (
+    <li key={index}>{score} rolls</li>
+  ));
 
   return bestScore ? bestScore : null;
 }

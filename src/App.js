@@ -2,9 +2,9 @@ import React from "react";
 import { nanoid } from "nanoid";
 import "./global.css";
 // Komponenty
-import Die from "./components/Die";
 import Confetti from "react-confetti";
 import SortDice from "./components/SortDice";
+import CreateAllDice from "./components/CreateAllDice";
 
 function App() {
   const [dice, setDice] = React.useState(createDices());
@@ -58,17 +58,15 @@ function App() {
     setRolls((oldDiceNumber) => oldDiceNumber + 1);
 
     setDice((oldDice) => {
-      const mappedArray = oldDice.map((die) => {
-        if (die.isActive === true) {
-          return { ...die };
-        } else {
-          return {
-            value: Math.ceil(Math.random() * 6),
-            isActive: false,
-            id: nanoid(),
-          };
-        }
-      });
+      const mappedArray = oldDice.map((die) =>
+        die.isActive
+          ? { ...die }
+          : {
+              value: Math.ceil(Math.random() * 6),
+              isActive: false,
+              id: nanoid(),
+            }
+      );
 
       return mappedArray;
     });
@@ -76,34 +74,20 @@ function App() {
 
   function clickDice(id) {
     setDice((oldDice) => {
-      const mappedArray = oldDice.map((die) => {
-        if (die.id === id) {
-          return {
-            ...die,
-            isActive: !die.isActive,
-          };
-        } else {
-          return {
-            ...die,
-          };
-        }
-      });
+      const mappedArray = oldDice.map((die) =>
+        die.id === id
+          ? {
+              ...die,
+              isActive: !die.isActive,
+            }
+          : {
+              ...die,
+            }
+      );
 
       return mappedArray;
     });
   }
-
-  const diceElements = dice.map((die) => {
-    return (
-      <Die
-        key={nanoid()}
-        dieID={nanoid()}
-        value={die.value}
-        isActive={die.isActive}
-        isClicked={() => clickDice(die.id)}
-      />
-    );
-  });
 
   return (
     <main>
@@ -114,7 +98,9 @@ function App() {
       </p>
       {win && <Confetti />}
       {win && <p className="win">WYGRAŁEŚ</p>}
-      <div className="dice-container">{diceElements}</div>
+      <div className="dice-container">
+        <CreateAllDice dice={dice} clickDice={clickDice} />
+      </div>
       <div>
         <span>ROLLS: {rolls}</span>/<span>TOTAL WINS: {totalWins}</span>
       </div>
